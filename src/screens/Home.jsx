@@ -13,6 +13,7 @@ import axios from "axios";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import MenuIcon from "../components/icons/MenuIcon";
 import CalendarIcon from "../components/icons/CalendarIcon";
+import Glimmer from "../components/Glimmer";
 
 const PAGE_SIZE = 8;
 
@@ -89,6 +90,7 @@ const Home = () => {
               </View>
             );
           }}
+          ListFooterComponent={<Glimmer />}
         />
       )}
     </View>
@@ -124,6 +126,7 @@ const styles = StyleSheet.create({
   },
   postsContainer: {
     padding: 16,
+    paddingBottom: 0,
   },
   postContainer: {
     paddingVertical: 14,
