@@ -17,24 +17,36 @@ import Post from "../components/Post";
 const PAGE_SIZE = 8;
 
 const Home = () => {
-  const [bootstrapped, setBootstrapped] = useState(true);
+  const [bootstrapped, setBootstrapped] = useState(false);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const [posts, setPosts] = useState([]);
 
   const fetch = async () => {
+    console.log("fetchinf");
     axios
       .get(
-        `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${PAGE_SIZE}`
+        `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${
+          PAGE_SIZE + 1
+        }`
       )
       .then((response) => {
-        setPosts(response.data);
-        // if (posts.length === 0) {
-        //   setBootstrapped(true);
-        //   setPosts(response.data);
-        // } else {
-        //   setPosts((v) => [...v, ...response.data]);
-        // }
+        console.log(response.data);
+        const data = response.data;
+        const items = response.data.slice(0, 8);
+
+        setHasMore(data.length > PAGE_SIZE);
+        if (posts.length === 0) {
+          setBootstrapped(true);
+          setPosts(items);
+        } else {
+          setPosts((v) => [...v, ...items]);
+        }
       });
+  };
+
+  const fetchMore = () => {
+    setPage((value) => value + 1);
   };
 
   useEffect(() => {
@@ -63,7 +75,9 @@ const Home = () => {
           renderItem={({ item: post }) => {
             return <Post post={post} />;
           }}
-          ListFooterComponent={<Glimmer />}
+          ListFooterComponent={hasMore && <Glimmer />}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={0.2}
         />
       )}
     </View>
