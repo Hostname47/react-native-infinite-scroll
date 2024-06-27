@@ -1,11 +1,8 @@
 import {
   ActivityIndicator,
-  Button,
   FlatList,
-  Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -13,6 +10,7 @@ import axios from "axios";
 import EmptyIcon from "../components/icons/EmptyIcon";
 import Glimmer from "../components/Glimmer";
 import Post from "../components/Post";
+import Search from "../components/Search";
 
 const PAGE_SIZE = 8;
 
@@ -23,7 +21,6 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   const fetch = async () => {
-    console.log("fetchinf");
     axios
       .get(
         `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${
@@ -31,16 +28,19 @@ const Home = () => {
         }`
       )
       .then((response) => {
-        console.log(response.data);
         const data = response.data;
         const items = response.data.slice(0, 8);
 
         setHasMore(data.length > PAGE_SIZE);
         if (posts.length === 0) {
-          setBootstrapped(true);
           setPosts(items);
         } else {
           setPosts((v) => [...v, ...items]);
+        }
+      })
+      .finally(() => {
+        if (!bootstrapped) {
+          setBootstrapped(true);
         }
       });
   };
@@ -68,17 +68,21 @@ const Home = () => {
           </Text>
         </View>
       ) : (
-        <FlatList
-          contentContainerStyle={styles.postsContainer}
-          data={posts}
-          keyExtractor={(post) => post.id}
-          renderItem={({ item: post }) => {
-            return <Post post={post} />;
-          }}
-          ListFooterComponent={hasMore && <Glimmer />}
-          onEndReached={fetchMore}
-          onEndReachedThreshold={0.2}
-        />
+        <View style={styles.container}>
+          <Search />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.postsContainer}
+            data={posts}
+            keyExtractor={(post) => post.id}
+            renderItem={({ item: post }) => {
+              return <Post post={post} />;
+            }}
+            ListFooterComponent={hasMore && <Glimmer />}
+            onEndReached={fetchMore}
+            onEndReachedThreshold={0.2}
+          />
+        </View>
       )}
     </View>
   );
@@ -111,8 +115,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
   },
-  postsContainer: {
-    padding: 16,
+  container: {
+    flex: 1,
+    padding: 14,
     paddingBottom: 0,
+  },
+  postsContainer: {
+    paddingTop: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    gap: 8,
   },
 });

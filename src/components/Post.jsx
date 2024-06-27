@@ -5,7 +5,7 @@ import React from "react";
 
 const Post = ({ post }) => {
   return (
-    <View style={styles.postContainer}>
+    <TouchableOpacity style={styles.postContainer} activeOpacity={0.6}>
       <View style={styles.postOwnerData}>
         <Image
           style={styles.postOwnerAvatar}
@@ -27,7 +27,7 @@ const Post = ({ post }) => {
       <Text numberOfLines={3} style={styles.postBody}>
         {post.body}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     backgroundColor: "white",
-    marginBottom: 12,
     borderWidth: 1,
     borderRadius: 3,
     borderColor: "#d0d8dc",
