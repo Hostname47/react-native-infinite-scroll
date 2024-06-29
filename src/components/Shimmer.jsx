@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const Glimmer = () => {
+const Shimmer = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -19,7 +19,7 @@ const Glimmer = () => {
   );
 };
 
-export default Glimmer;
+export default Shimmer;
 
 const styles = StyleSheet.create({
   container: {

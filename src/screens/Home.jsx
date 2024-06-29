@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EmptyIcon from "../components/icons/EmptyIcon";
-import Glimmer from "../components/Glimmer";
+import Shimmer from "../components/Shimmer";
 import Post from "../components/Post";
 import Search from "../components/Search";
 
@@ -17,7 +17,7 @@ const PAGE_SIZE = 8;
 const Home = () => {
   const [bootstrapped, setBootstrapped] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [posts, setPosts] = useState([]);
 
   const fetch = async () => {
@@ -46,6 +46,9 @@ const Home = () => {
   };
 
   const fetchMore = () => {
+    if (!hasMore) {
+      return;
+    }
     setPage((value) => value + 1);
   };
 
@@ -78,9 +81,9 @@ const Home = () => {
             renderItem={({ item: post }) => {
               return <Post post={post} />;
             }}
-            ListFooterComponent={hasMore && <Glimmer />}
-            onEndReached={fetchMore}
-            onEndReachedThreshold={0.2}
+            ListFooterComponent={hasMore && <Shimmer />} // 1
+            onEndReached={fetchMore} // 2
+            onEndReachedThreshold={0.2} // 3
           />
         </View>
       )}
